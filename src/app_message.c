@@ -50,6 +50,7 @@ void accel_data_handler(AccelData *data, uint32_t num_samples) {
 void window_load(Window *window) {
 	text_buffer = malloc(100);	
 	text_layer = text_layer_create(GRect(0,0,144,154));
+	text_layer_set_font(text_layer, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(text_layer));
 }
 
