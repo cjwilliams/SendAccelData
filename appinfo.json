@@ -1,0 +1,22 @@
+{
+    "uuid": "345ba3ad-2699-4956-9a4b-d8c410f7ce9f",
+    "resources": {
+        "media": []
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "girlgrammer",
+    "shortName": "SendAccelData",
+    "longName": "SendAccelData",
+    "watchapp": {
+        "watchface": false
+    },
+    "versionCode": 1,
+    "appKeys": {
+        "accel_y_data": 1,
+        "accel_z_data": 2,
+        "accel_x_data": 0
+    },
+    "versionLabel": "1.0"
+}
