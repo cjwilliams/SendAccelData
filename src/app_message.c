@@ -32,17 +32,6 @@ void send_message(int16_t accel_x, int16_t accel_y, int16_t accel_z){
 
 // Called when a message is received from PebbleKitJS
 static void in_received_handler(DictionaryIterator *received, void *context) {
-//	Tuple *tuple;
-	
-//	tuple = dict_find(received, STATUS_KEY);
-//	if(tuple) {
-//		APP_LOG(APP_LOG_LEVEL_DEBUG, "Received Status: %d", (int)tuple->value->uint32); 
-//	}
-	
-//	tuple = dict_find(received, MESSAGE_KEY);
-//	if(tuple) {
-//		APP_LOG(APP_LOG_LEVEL_DEBUG, "Received Message: %s", tuple->value->cstring);
-//	}
 }
 
 // Called when an incoming message from PebbleKitJS is dropped
@@ -54,16 +43,12 @@ static void out_failed_handler(DictionaryIterator *failed, AppMessageResult reas
 }
 
 void accel_data_handler(AccelData *data, uint32_t num_samples) {
-//	for(int i=0; i < num_samples; i++) {
-//		AccelData *sample = data[i];
-			send_message(data->x, data->y, data->z);
-			print_accel_data(data->x, data->y, data->z);
-//	}
+	send_message(data->x, data->y, data->z);
+	print_accel_data(data->x, data->y, data->z);
 }
 
 void window_load(Window *window) {
-	text_buffer = malloc(100);
-	
+	text_buffer = malloc(100);	
 	text_layer = text_layer_create(GRect(0,0,144,154));
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(text_layer));
 }
@@ -85,7 +70,6 @@ void init(void) {
 	app_message_register_inbox_received(in_received_handler); 
 	app_message_register_inbox_dropped(in_dropped_handler); 
 	app_message_register_outbox_failed(out_failed_handler);
-		
 	app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 	
 	accel_data_service_subscribe(1, accel_data_handler);
