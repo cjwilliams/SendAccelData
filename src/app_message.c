@@ -1,7 +1,10 @@
 #include <pebble.h>
 
 Window *window;	
-	
+
+TextLayer *text_layer;
+char *text_buffer;	
+
 // Key values for AppMessage Dictionary
 enum {
 	ACCEL_X_KEY,	
@@ -9,8 +12,13 @@ enum {
 	ACCEL_Z_KEY
 };
 
+void print_accel_data(int16_t accel_x, int16_t accel_y, int16_t accel_z) {
+	snprintf(text_buffer, 100, "x:%i, y:%i, z:%i", accel_x, accel_y, accel_z);
+	text_layer_set_text(text_layer, text_buffer);
+}
+
 // Write message to buffer & send
-void send_message(uint8_t accel_x, uint8_t accel_y, uint8_t accel_z){
+void send_message(int16_t accel_x, int16_t accel_y, int16_t accel_z){
 	DictionaryIterator *iter;
 	
 	app_message_outbox_begin(&iter);
@@ -48,12 +56,29 @@ static void out_failed_handler(DictionaryIterator *failed, AppMessageResult reas
 void accel_data_handler(AccelData *data, uint32_t num_samples) {
 //	for(int i=0; i < num_samples; i++) {
 //		AccelData *sample = data[i];
-		send_message(data->x, data->y, data->z);
+			send_message(data->x, data->y, data->z);
+			print_accel_data(data->x, data->y, data->z);
 //	}
+}
+
+void window_load(Window *window) {
+	text_buffer = malloc(100);
+	
+	text_layer = text_layer_create(GRect(0,0,144,154));
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(text_layer));
+}
+
+void window_unload(Window *window) {
+	text_layer_destroy(text_layer);
+	free(text_buffer);
 }
 
 void init(void) {
 	window = window_create();
+	window_set_window_handlers(window, (WindowHandlers) {
+				.load = window_load,
+				.unload = window_unload
+	});
 	window_stack_push(window, true);
 	
 	// Register AppMessage handlers
